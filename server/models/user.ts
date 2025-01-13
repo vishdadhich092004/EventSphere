@@ -21,6 +21,15 @@ const userSchema = new Schema(
       enum: ["user", "admin"],
       default: "user",
     },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
+    deletedAt: {
+      type: Date,
+      required: false,
+    },
   },
   {
     timestamps: true,

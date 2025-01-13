@@ -1,4 +1,5 @@
 import mongoose, { Schema } from "mongoose";
+import { RegistrationType } from "../shared/types";
 
 const registrationSchema = new Schema(
   {
@@ -21,6 +22,14 @@ const registrationSchema = new Schema(
       type: Date,
       default: Date.now,
     },
+    cancelledAt: {
+      type: Date,
+      required: false,
+    },
+    cancellationReason: {
+      type: String,
+      required: false,
+    },
   },
   {
     timestamps: true,
@@ -30,6 +39,9 @@ const registrationSchema = new Schema(
 // preventing duplicating registrations
 registrationSchema.index({ event: 1, user: 1 }, { unique: true });
 
-const Registration = mongoose.model("Registration", registrationSchema);
+const Registration = mongoose.model<RegistrationType>(
+  "Registration",
+  registrationSchema
+);
 
 export default Registration;

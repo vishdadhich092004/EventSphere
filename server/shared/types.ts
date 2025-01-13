@@ -6,6 +6,8 @@ export interface UserType {
   role: "user" | "admin";
   createdAt: Date;
   updatedAt: Date;
+  isDeleted: boolean;
+  deletedAt?: Date;
 }
 
 export interface EventType {
@@ -26,6 +28,8 @@ export interface RegistrationType {
   event: EventType;
   status: "registered" | "cancelled";
   registeredAt: Date;
+  cancelledAt?: Date;
+  cancellationReason?: string;
   createdAt: Date;
   updatedAt: Date;
 }
