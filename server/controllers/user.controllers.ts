@@ -110,11 +110,53 @@ export const fetchUser = async (
   req: Request,
   res: Response
 ): Promise<UserType | any> => {
-  return "i";
+  try {
+    const { id } = req.params;
+    return res.status(200).json(id);
+  } catch (e) {
+    console.error(e);
+    return res
+      .status(500)
+      .json({ success: false, error: "Internal Server Error" });
+  }
 };
 export const updateUser = async (
   req: Request,
   res: Response
 ): Promise<UserType | any> => {
-  return "ji";
+  try {
+    const { id } = req.params;
+    const { name, email, password } = req.body;
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ success: false, error: "User Not Found" });
+    }
+
+    // Check if the email is being updated and if it's already in use
+    if (email && email !== user.email) {
+      const existingUser = await User.findOne({ email: email });
+      if (existingUser) {
+        return res
+          .status(409)
+          .json({
+            success: false,
+            error: "Email already in use by another user",
+          });
+      }
+    }
+
+    if (name) user.name = name;
+    if (email) user.email = email;
+    if (password) user.password = password;
+
+    await user.save();
+    // omitting the password
+    const { password: _, ...updatedUser } = user.toObject();
+    return res.status(200).json(updatedUser);
+  } catch (e) {
+    console.error(e);
+    return res
+      .status(500)
+      .json({ success: false, erorr: "Internal Server Error" });
+  }
 };

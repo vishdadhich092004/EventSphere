@@ -6,6 +6,12 @@ import {
   updateUser,
 } from "../controllers/user.controllers";
 import { check } from "express-validator";
+import { verifyToken } from "../middleware/auth.middleware";
+import {
+  isAdmin,
+  isOwner,
+  isOwnerOrAdmin,
+} from "../middleware/owner-admin.middleware";
 const router = express.Router();
 
 router.post(
@@ -33,7 +39,7 @@ router.post(
   ],
   loginUser
 );
-router.get("/:id", fetchUser);
-router.put("/:id", updateUser);
+router.get("/:id", verifyToken, isOwnerOrAdmin, fetchUser);
+router.put("/:id", verifyToken, isOwner, updateUser);
 
 export default router;

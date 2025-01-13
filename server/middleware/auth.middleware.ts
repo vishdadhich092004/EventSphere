@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
-interface User {
+interface JWTUser {
   userId: string;
   role: string;
 }
@@ -17,26 +17,28 @@ declare global {
   }
 }
 
-export const verifyToken = (
+export const verifyToken = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+): Promise<void> => {
   const token = req.cookies["auth_token"];
   if (!token) {
-    return res
+    res
       .status(401)
       .json({ success: false, error: "Access Denied. No token provided" });
+    return;
   }
+
   try {
     const decoded = jwt.verify(
       token,
       process.env.JWT_SECRET_KEY as string
-    ) as User;
+    ) as JWTUser;
     req.user = decoded;
     next();
   } catch (e) {
     console.error(e);
-    return res.status(401).json({ success: false, error: "Invalid Token" });
+    res.status(403).json({ success: false, error: "Forbidden, Invalid Token" });
   }
 };
