@@ -16,7 +16,16 @@ export interface EventType {
   location: string;
   capacity: number;
   organiser: UserType;
-  attendees: UserType[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface RegistrationType {
+  _id: string;
+  user: UserType;
+  event: EventType;
+  status: "registered" | "cancelled";
+  registeredAt: Date;
   createdAt: Date;
   updatedAt: Date;
 }

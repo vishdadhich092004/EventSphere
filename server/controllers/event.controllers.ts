@@ -75,15 +75,8 @@ export const fetchEvent = async (
         .status(403)
         .json({ success: false, error: "Event Id Missing" });
     }
-    const event = await Event.findById(id)
-      .populate("organiser", "-password")
-      .populate({
-        path: "attendees",
-        populate: {
-          path: "user",
-          select: "-password",
-        },
-      });
+    const event = await Event.findById(id).populate("organiser", "-password");
+
     if (!event) {
       return res.status(404).json({ success: false, error: "No Event Found" });
     }
