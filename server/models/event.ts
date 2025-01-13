@@ -28,6 +28,12 @@ const eventSchema = new Schema(
       ref: "User",
       required: true,
     },
+    attendees: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "User",
+      },
+    ],
   },
   {
     timestamps: true,

@@ -16,6 +16,7 @@ export interface EventType {
   location: string;
   capacity: number;
   organiser: UserType;
+  attendees: UserType[];
   createdAt: Date;
   updatedAt: Date;
 }

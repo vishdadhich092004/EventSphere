@@ -7,11 +7,7 @@ import {
 } from "../controllers/user.controllers";
 import { check } from "express-validator";
 import { verifyToken } from "../middleware/auth.middleware";
-import {
-  isAdmin,
-  isOwner,
-  isOwnerOrAdmin,
-} from "../middleware/owner-admin.middleware";
+import { isOwner, isOwnerOrAdmin } from "../middleware/owner-admin.middleware";
 const router = express.Router();
 
 router.post(

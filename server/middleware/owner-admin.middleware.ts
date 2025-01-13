@@ -21,12 +21,10 @@ export const isOwner = async (
 ): Promise<void> => {
   const { id } = req.params;
   if (!req.user) {
-    res
-      .status(403)
-      .json({
-        success: false,
-        error: "Access denied. User not authenticated.",
-      });
+    res.status(403).json({
+      success: false,
+      error: "Access denied. User not authenticated.",
+    });
     return;
   }
   if (req.user.userId === id) {
@@ -42,7 +40,6 @@ export const isOwnerOrAdmin = async (
 ): Promise<void> => {
   const { id } = req.params;
 
-  // Check if the user is authenticated
   if (!req.user) {
     res.status(403).json({
       success: false,
@@ -51,12 +48,10 @@ export const isOwnerOrAdmin = async (
     return;
   }
 
-  // Allow access if the user is an admin or is fetching their own details
   if (req.user.role === "admin" || req.user.userId === id) {
     return next();
   }
 
-  // Otherwise, deny access
   res.status(403).json({
     success: false,
     error: "Access denied. Admins or the user themselves only.",
