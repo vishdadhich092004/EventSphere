@@ -4,6 +4,8 @@ import "dotenv/config";
 import { connectMongo } from "./db/db.config";
 import cookieParser from "cookie-parser";
 import routes from "./routes/routes";
+import swaggerUi from "swagger-ui-express";
+import swaggerDocument from "./swagger/swagger.json";
 const app = express();
 
 app.use(cors());
@@ -20,6 +22,8 @@ async function connectDB() {
 }
 connectDB();
 
+// swagger docs
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 // connecting routes
 app.use("/api", routes);
 
