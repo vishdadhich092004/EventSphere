@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import Registration from "../models/registration";
 import { RegistrationType, UserType } from "../shared/types";
 import Event from "../models/event";
+import User from "../models/user";
+import { sendEventEmail } from "../services/email.service";
 
 export const registerForEvent = async (
   req: Request,
@@ -61,6 +63,11 @@ export const registerForEvent = async (
       });
       await registration.save();
     }
+    // mail notification
+    const user = await User.findById(userId);
+    if (user && event) {
+      await sendEventEmail(user, event, "registration");
+    }
     res.status(201).json({ success: true, data: registration });
   } catch (e) {
     console.error(e);
@@ -99,6 +106,12 @@ export const cancelRegistration = async (
     registration.status = "cancelled";
     await registration.save();
 
+    // send the mail
+    const user = await User.findById(userId);
+    const event = await Event.findById(eventId);
+    if (user && event) {
+      await sendEventEmail(user, event, "cancellation");
+    }
     return res
       .status(200)
       .json({ success: true, message: "Registration Cancelled" });
